@@ -16,10 +16,11 @@ const ctx = canvas.getContext('2d');
 
 canvas.width = 1200;
 canvas.height = 800;
-
+let gameOver = 'false';
 let frame = 0;
 let score = 0;
 ctx.font = '80px Courier New';
+
 //ctx.gameSpeed = 1;
 
 //mouse click, coordinates
@@ -177,8 +178,8 @@ beeRight.src = 'beeSpriteR.png';
 //beeLeft.src = 'beeSpriteL.png';
 
     ////////oscars
- const oscarsArr = [];
- const imagesArray = ['item1.png', 'item2.png', 'item3.png', 'item4.png'];
+let oscarsArr = [];
+ //const imagesArray = ['item1.png', 'item2.png', 'item3.png', 'item4.png'];
  /////
  ///const myArray = ["bob.jpg", "joe.jpg", "chat.jpg"]
 ///const randomImage = () => {
@@ -186,11 +187,18 @@ beeRight.src = 'beeSpriteR.png';
  //console.log(image);
  //////
  ////////
- let num = Math.floor(Math.random() * (imagesArray.length));
- console.log(num)
- imageX = imagesArray[num];
- const flowerImage = new Image();
- flowerImage.src = imageX;
+ //let num = Math.floor(Math.random() * (imagesArray.length));
+ //console.log(num)
+const flowersArr = []
+ const flower1Image = new Image();
+ flower1Image.src = 'item1.png';
+ const flower2Image = new Image();
+ flower2Image.src = 'item2.png';
+ const flower3Image = new Image();
+ flower3Image.src = 'item3.png';
+ const flower4Image = new Image();
+ flower4Image.src = 'item4.png';
+flowersArr.push(flower1Image, flower2Image, flower3Image, flower4Image)
 //  console.log(imageX)
 
 // const randomImage = () => {
@@ -199,7 +207,7 @@ beeRight.src = 'beeSpriteR.png';
 // console.log(flower)
 
  class Oscar {
-  constructor() {
+  constructor(flowerImage) {
     this.x = Math.random() * canvas.width;
     this.y = -70;
     this.speed = Math.random() * 3.0 + 1;
@@ -221,7 +229,7 @@ beeRight.src = 'beeSpriteR.png';
     ctx.fill();
     ctx.closePath();
     
-    ctx.drawImage(flowerImage, this.x - 40, this.y - 40, 80, 80 );
+    ctx.drawImage(this.image, this.x - 40, this.y - 40, 80, 80 );
 
   }
  }
@@ -238,7 +246,8 @@ beeRight.src = 'beeSpriteR.png';
 
  function oscarRain() {
     if (frame % 75 === 0) {
-        oscarsArr.push(new Oscar());
+        const randomFlower = flowersArr[Math.floor(Math.random() * flowersArr.length)]
+        oscarsArr.push(new Oscar(randomFlower));
        //console.log(oscarsArr.length);
     }
     for (let i = 0; i < oscarsArr.length; i++ ) {
@@ -287,10 +296,10 @@ class Enemy {
         this.radius = 50;
         this.speed = Math.random() * 2 + 2;
         this.frame = 0;
-        this.frameX = 0;
-        this.frameY = 0;
-        this.spriteHeight = 12;
-        this.spriteWidth = 12;
+       // this.frameX = 0;
+       // this.frameY = 0;
+       // this.spriteHeight = 12;
+        //this.spriteWidth = 12;
     }
     draw() {
         ctx.fillStyle = 'red';
@@ -305,17 +314,45 @@ class Enemy {
             this.y = Math.random() * (canvas.height - 150) + 90;
             this.speed = Math.random() * 2 + 2;
         }
+        ////enemy collision
+        const distX = this.x - player.x;
+        const distY = this.y - player.y;
+        const distance = Math.sqrt( distX * distX + distY * distY );
+        if (distance < this.radius + player.radius) {
+            endGame();
+        }
+
     }
 }
- 
-const enemy1 = new Enemy();
+ let animationFrameId;
+let enemy1 = new Enemy();
 function displayEnemies() {
     enemy1.update();
     enemy1.draw();
 }
 
+function endGame(){
+    cancelAnimationFrame(animationFrameId)
+    ctx.fillStyle = 'white';
+    ctx.fillText("Game Over, score is " + score, 110, 300);
+    score = 0;
+    oscarsArr = [];
+    enemy1 = new Enemy();
+    let startScreen = document.querySelector('#start-screen')
+    startScreen.style.display = 'inline'
+    startScreen.style.position = 'absolute'
+    startScreen.style.top = '50%'
+    startScreen.style.left = '50%'
+    startScreen.style.transform = 'translate(-50%, -50%)'
+}
+
+
+function stop() {
+    console.log('stop');
+}
 
     function animate(){
+        animationFrameId = requestAnimationFrame(animate);
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         displayBackground();
         movingCloud1();
@@ -329,12 +366,19 @@ function displayEnemies() {
         ctx.fillText('Oscars:' + score, 20, 780);
         player.draw();
         frame++;
-        requestAnimationFrame(animate);
+       
     }
- animate();
+ 
 
  window.addEventListener('resize', function(){
     mouse.position = canvas.getBoundingClientRect();
+ })
+
+ document.querySelector('#start').addEventListener('click', () => {
+    canvas.style.display = 'inline'
+    document.querySelector('#start-screen').style.display = 'none'
+    animate();
+
  })
 
 
@@ -351,6 +395,11 @@ function displayEnemies() {
 //// random flickering(solved)
 //// how to create  record stat and game record(let game count = 0?, everytime loose gamecount++)
 //// how to make background music
+
+
+/////how to stop game and ask player for restart
+//// how to make game over message stay
+///game over music how to cut and go back to game music
 
 
 

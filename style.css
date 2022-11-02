@@ -3,6 +3,9 @@
     padding: 0;
     box-sizing: border-box;
 }
+html {
+    background-color: rgb(248, 248, 160)
+}
 body {
     width: 100vw;
     height: 100vh;
@@ -11,5 +14,6 @@ body {
     justify-content: center;  
 }
 #canvas {
-    border: 3px solid rgb(45, 45, 45);
+    border: 5px solid rgb(45, 45, 45);
+    border-radius: 4%;
 }
