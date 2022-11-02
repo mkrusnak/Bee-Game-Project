@@ -132,8 +132,8 @@ beeRight.src = 'beeSpriteR.png';
     update() {
         const distX = this.x - mouse.x;
         const distY = this.y - mouse.y;
-        let theta = Math.atan2(distX, distY);
-        this.angle = theta;
+        //let theta = Math.atan2(distX, distY);
+       // this.angle = theta;
 
 
         if (this.x != mouse.x) {
@@ -158,7 +158,7 @@ beeRight.src = 'beeSpriteR.png';
         ctx.closePath();
         ctx.save();
         ctx.translate(this.x, this.y);
-       /// ctx.rotate(this.angle);
+       ctx.rotate(this.angle);
 
         //ctx.fillRect(this.x, this.y, this.radius, 10)
         if (this.x >= mouse.x) {
@@ -276,6 +276,45 @@ beeRight.src = 'beeSpriteR.png';
     
 }
 
+
+const enemyImg = new Image();
+enemyImg.src = '';
+
+class Enemy {
+    constructor(){
+        this.x = canvas.width;
+        this.y = Math.random() * (canvas.height - 150) + 50;
+        this.radius = 50;
+        this.speed = Math.random() * 2 + 2;
+        this.frame = 0;
+        this.frameX = 0;
+        this.frameY = 0;
+        this.spriteHeight = 12;
+        this.spriteWidth = 12;
+    }
+    draw() {
+        ctx.fillStyle = 'red';
+        ctx.beginPath;
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fill();
+    }
+    update () {
+        this.x -= this.speed;
+        if ( this.x < 0 - this.radius * 2) {
+            this.x = canvas.width + 200;
+            this.y = Math.random() * (canvas.height - 150) + 90;
+            this.speed = Math.random() * 2 + 2;
+        }
+    }
+}
+ 
+const enemy1 = new Enemy();
+function displayEnemies() {
+    enemy1.update();
+    enemy1.draw();
+}
+
+
     function animate(){
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         displayBackground();
@@ -283,6 +322,7 @@ beeRight.src = 'beeSpriteR.png';
         movingCloud2();
         movingCloud3();
         movingCloud4();
+        displayEnemies();
         oscarRain();
         player.update();
         ctx.fillStyle = 'black';
