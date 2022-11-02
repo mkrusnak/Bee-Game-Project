@@ -384,9 +384,9 @@ function stop() {
     }
  
 
- window.addEventListener('resize', function(){
-    mouse.position = canvas.getBoundingClientRect();
- })
+//  window.addEventListener('resize', function(){
+//     mouse.position = canvas.getBoundingClientRect();
+//  })
 
  document.querySelector('#start').addEventListener('click', () => {
     document.querySelector('#start-screen').style.display = 'none'
