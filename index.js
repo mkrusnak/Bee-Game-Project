@@ -25,7 +25,7 @@ ctx.font = '80px Courier New';
 
 //mouse click, coordinates
 
-let mousePosition = canvas.getBoundingClientRect();
+let canvasPosition = canvas.getBoundingClientRect();
 const mouse = {
     x: canvas.width / 2,
     y: canvas.height/ 2,
@@ -33,9 +33,10 @@ const mouse = {
 }
 canvas.addEventListener('click', function(event) {
 mouse.click = true;
-mouse.x = event.x - mousePosition.left;
-mouse.y = event.y - mousePosition.top;
-console.log('Here i am ' + mouse.x, mouse.y);
+console.log('event x,y', event.x, event.y, event)
+mouse.x = event.x - canvas.offsetLeft;
+mouse.y = event.y - canvas.offsetTop;
+//console.log('Here i am ' + mouse.x, mouse.y);
 } ) ;
 
 canvas.addEventListener('no-click', function() {
@@ -48,6 +49,15 @@ background.src = 'background.jpeg';
 
 function displayBackground() {
     ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
+}
+
+
+///banner
+
+const banner = new Image();
+banner.src = './banner.png';
+function displayBanner() {
+    ctx.drawImage(banner, 600, 600, 600, 200);
 }
 
 
@@ -145,7 +155,9 @@ beeRight.src = 'beeSpriteR.png';
     }
 
         draw(){
+            
         if (mouse.click = true ) {
+            console.log(this.x, this.y, mouse.x, mouse.y)
             ctx.lineWidth = 2;
             ctx.beginPath();
             ctx.moveTo(this.x, this.y);
@@ -324,6 +336,8 @@ class Enemy {
 
     }
 }
+
+
  let animationFrameId;
 let enemy1 = new Enemy();
 function displayEnemies() {
@@ -375,8 +389,9 @@ function stop() {
  })
 
  document.querySelector('#start').addEventListener('click', () => {
-    canvas.style.display = 'inline'
     document.querySelector('#start-screen').style.display = 'none'
+    canvas.style.display = 'inline'
+    
     animate();
 
  })
