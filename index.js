@@ -1,13 +1,3 @@
-///setup game area/canvas ++
-///build player ++
-///move player around  ++
-///create pop-up objects  
-//collision detection ++
-//random enemy objects  
-//if collect = score+, if enemy = game over
-///images for objects, background  ++
-///moving background?  
-///frame around canvas, some text
 
 
 const canvas = document.querySelector('#canvas');
@@ -23,7 +13,7 @@ let frame = 0;
 let score = 0;
 let gameCount = 0;
 let record = 0;
-let timeSeconds = 5;
+let timeSeconds = 60;
 
 
 
@@ -148,8 +138,6 @@ beeRight.src = 'beeSpriteR.png';
     update() {
         const distX = this.x - mouse.x;
         const distY = this.y - mouse.y;
-        //let theta = Math.atan2(distX, distY);
-       // this.angle = theta;
 
 
         if (this.x != mouse.x) {
@@ -236,7 +224,7 @@ flowersArr.push(flower1Image, flower2Image, flower3Image, flower4Image)
 
 
  function flowerRain() {
-    if (frame % 60 === 0) {
+    if (frame % 45 === 0) {
         const randomFlower = flowersArr[Math.floor(Math.random() * flowersArr.length)]
         flowerArr.push(new Flower(randomFlower));
 
@@ -337,7 +325,6 @@ class Rocket {
     draw() {
         ctx.fillStyle = 'transparent';
         ctx.beginPath();
-       // ctx.fillRect(this.x, this.y, 120, 30)
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
         ctx.fill();
         ctx.drawImage(this.image, this.x - 240, this.y - 150, 340, 320 );
@@ -404,7 +391,12 @@ function endGame(endGameMessage){
     function animate(){
         if(frame % 60 === 0){
             timeSeconds--;
+            // if ( timeSeconds === 10 ){
+            //     const timeOutAudio = new Audio('./timeOut.mp3');
+            //     timeOutAudio.play();
+            // }
         }
+
         animationFrameId = requestAnimationFrame(animate);
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         //soundtrack.play();
@@ -429,32 +421,23 @@ function endGame(endGameMessage){
         ctx.font = '45px Courier New';
         
         ctx.fillStyle = 'rgb(60, 149, 213)';
-        ctx.fillText('Timer:' + Math.round(timeSeconds), 968, 48);
+        ctx.fillText('Timer:' + Math.ceil(timeSeconds), 968, 48);
 
         player.draw();
         frame++;
-        // if(timeSeconds <= 10 ) {
-        //     const timeOutaudio = new Audio('timeOut.mp3');
-        //     timeOutaudio.play();
-        // }
         if(timeSeconds <= 0) {
             endGame('  You Lost!');
-            const catchAudio2 = new Audio('pickup1.mp3');
-            catchAudio2.play();
+            const youLostAudio = new Audio('./youLost.wav');
+            youLostAudio.play();
         }
         if(score >= 100) {
             endGame('  You Won!');
-            const catchAudio2 = new Audio('pickup1.mp3');
-            catchAudio2.play();
+            const winAudio = new Audio('./winAudio.mp3');
+            winAudio.play();
         }
        
     }
  
-
-//  window.addEventListener('resize', function(){
-//     mouse.position = canvas.getBoundingClientRect();
-//  })
-
  document.querySelector('#start').addEventListener('click', () => {
     document.querySelector('#start-screen').style.display = 'none'
     document.querySelector('.start-text1').style.display = 'none'
@@ -464,59 +447,6 @@ function endGame(endGameMessage){
     animate();
 
  })
-
-
-
-
-
-
-
-
-///// =========bugs========
-///  all oscars blinking when catched
-///  sound is not random (solved)
-//// doesnt play sound on newCatch until the previous one finishes
-//// random flickering(solved)
-//// how to create  record stat and game record(let game count = 0?, everytime loose gamecount++)
-//// how to make background music
-
-
-/////how to stop game and ask player for restart
-//// how to make game over message stay
-///game over music how to cut and go back to game music
-
-
-
-
-
-
-
-
- /*if ( !oscarsArr[i].scoreAdded ) {
-                if (oscarsArr[i].sound == catchAudio1) {
-                    catchAudio1.play();
-                } 
-                
-                
-                /* else {
-                    catchAudio2.play();
-                }
-            
-
-                */
-
-                /*  for(let i = oscarsArr.length - 1; i >= 0; i--)
-     oscarsArr[i].update();
-     oscarsArr[i].draw(); 
-     if ( oscarsArr[i].y > canvas.height) {
-         oscarsArr.splice(i, 1);
-         i--;
-        // console.log('ok');
-     }
-     */
-
-
-
 
      //////background sound
      ////collission sound
