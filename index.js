@@ -23,6 +23,7 @@ let frame = 0;
 let score = 0;
 let gameCount = 0;
 let record = 0;
+let timeSeconds = 60;
 
 
 //ctx.gameSpeed = 1;
@@ -281,11 +282,14 @@ flowersArr.push(flower1Image, flower2Image, flower3Image, flower4Image)
                     const catchAudio1 = new Audio('pickup1.mp3');
                         catchAudio1.play();
                     } 
-                    
+  ////////fix sounds before project is pushed                  
                     else {
                         const catchAudio2 = new Audio('pickup1.mp3');
                         catchAudio2.play();
                     } 
+                    // if (score == 3) {
+                    //    youWon();
+                    // }
                     
                     score++;
                     oscarsArr[i].scoreAdded = true;
@@ -302,29 +306,32 @@ flowersArr.push(flower1Image, flower2Image, flower3Image, flower4Image)
 }
 
 
+const rocketImg = new Image();
+rocketImg.src = './rocket1.png';
 const enemyImg = new Image();
-enemyImg.src = '';
+enemyImg.src = './enemy1.png';
 
 class Enemy {
     constructor(){
-        this.x = canvas.width;
-        this.y = Math.random() * (canvas.height - 150) + 50;
-        this.radius = 50;
+        this.x = canvas.width + 200;
+        this.y = Math.random() * (canvas.height - 200) + 50;
+        this.radius = 45;
         this.speed = Math.random() * 2 + 2;
         this.frame = 0;
-       // this.frameX = 0;
-       // this.frameY = 0;
-       // this.spriteHeight = 12;
-        //this.spriteWidth = 12;
+        this.image = enemyImg;
     }
     draw() {
-        ctx.fillStyle = 'red';
-        ctx.beginPath;
-        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = 'transparent';
+        ctx.beginPath();
+        ctx.fillRect(this.x, this.y, 120, 30)
+        ///ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
         ctx.fill();
+       ctx.drawImage(this.image, this.x - 60, this.y - 100 , 260, 240 );
+        ctx.closePath();
     }
     update () {
-        this.x -= this.speed;
+        this.x -= this.speed * 1.2;
+        
         if ( this.x < 0 - this.radius * 2) {
             this.x = canvas.width + 200;
             this.y = Math.random() * (canvas.height - 150) + 90;
@@ -335,9 +342,50 @@ class Enemy {
         const distY = this.y - player.y;
         const distance = Math.sqrt( distX * distX + distY * distY );
         if (distance < this.radius + player.radius) {
-            endGame();
+            ///catchAudio2.play();
+            endGame("Game Over, score is ");
             gameCount++;
-            catchAudio2.play();
+           
+        }
+
+    }
+}
+
+class Rocket {
+    constructor(){
+        this.x = 0 - 200;
+        this.y = Math.random() * (canvas.height - 200) + 50;
+        this.radius = 50;
+        this.speed = Math.random() * 2 + 2;
+        this.frame = 0;
+        this.image = rocketImg;
+    }
+    draw() {
+        ctx.fillStyle = 'transparent';
+        ctx.beginPath();
+        ctx.fillRect(this.x, this.y, 120, 30)
+        //ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.drawImage(this.image, this.x - 90, this.y - 90, 170, 170 );
+        ctx.closePath();
+    }
+    update () {
+        this.x += this.speed * 1.2;
+        if ( this.x > canvas.width + this.radius * 2) {
+            this.x = 0 - 200;
+            this.y = Math.random() * (canvas.height - 150) + 90;
+            this.speed = Math.random() * 2 + 2;
+        }
+        ////enemy collision
+        const distX = this.x - player.x;
+        const distY = this.y - player.y;
+        const distance = Math.sqrt( distX * distX + distY * distY );
+        if (distance < this.radius + player.radius) {
+            //catchAudio2.play();
+            endGame("Game Over, score is ");
+            gameCount++;
+
+           
         }
 
     }
@@ -345,22 +393,29 @@ class Enemy {
 
 
  let animationFrameId;
+ let animationFrameId1;
 let enemy1 = new Enemy();
+let rocket1 = new Rocket();
 
 
 
 function displayEnemies() {
     enemy1.update();
     enemy1.draw();
+    rocket1.update();
+    rocket1.draw();
 }
 
-function endGame(){
+function endGame(endGameMessage){
+    ///catchAudio1.play();
     cancelAnimationFrame(animationFrameId)
+    timeSeconds = 60;
     ctx.fillStyle = 'white';
-    ctx.fillText("Game Over, score is " + score, 110, 300);
+    ctx.fillText(endGameMessage + score, 110, 300);
     score = 0;
     oscarsArr = [];
     enemy1 = new Enemy();
+    rocket1 = new Rocket();
     let startScreen = document.querySelector('#start-screen')
     startScreen.style.display = 'inline'
     startScreen.style.position = 'absolute'
@@ -370,11 +425,30 @@ function endGame(){
 }
 
 
+// function youWon(){
+//     cancelAnimationFrame(animationFrameId1)
+//     ctx.fillStyle = 'white';
+//     ctx.fillText("you won, score is 3");
+//     score = 0;
+//     oscarsArr = [];
+//     enemy1 = new Enemy();
+//     let startScreen = document.querySelector('#start-screen')
+//     startScreen.style.display = 'inline'
+//     startScreen.style.position = 'absolute'
+//     startScreen.style.top = '50%'
+//     startScreen.style.left = '50%'
+//     startScreen.style.transform = 'translate(-50%, -50%)'
+// }
+
 
     function animate(){
+        if(frame % 60 === 0){
+            timeSeconds--;
+        }
         animationFrameId = requestAnimationFrame(animate);
+       // animationFrameId1 = requestAnimationFrame(animate);
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        soundtrack.play();
+        //soundtrack.play();
         displayBackground();
         movingCloud1();
         movingCloud2();
@@ -391,9 +465,12 @@ function endGame(){
 
         ctx.font = '65px Courier New';
         ctx.fillStyle = 'rgb(248, 248, 160)';
-        ctx.fillText('Flowers:'+ score, 80, 750);
+        ctx.fillText('Flowers:'+ score + ' Time Remaining: ' + timeSeconds, 80, 750);
         player.draw();
         frame++;
+        if(timeSeconds <= 0){
+            endGame('You won');
+        }
        
     }
  
