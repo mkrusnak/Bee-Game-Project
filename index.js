@@ -12,6 +12,8 @@
 
 const canvas = document.querySelector('#canvas');
 const ctx = canvas.getContext('2d');
+const soundtrack = new Audio('./soundtrack.wav');
+
 
 
 canvas.width = 1200;
@@ -19,7 +21,9 @@ canvas.height = 800;
 let gameOver = 'false';
 let frame = 0;
 let score = 0;
-ctx.font = '80px Courier New';
+let gameCount = 0;
+let record = 0;
+
 
 //ctx.gameSpeed = 1;
 
@@ -45,7 +49,7 @@ canvas.addEventListener('no-click', function() {
  
 /////background
 const background = new Image ();
-background.src = 'background.jpeg';
+background.src = './background.jpeg';
 
 function displayBackground() {
     ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
@@ -57,7 +61,7 @@ function displayBackground() {
 const banner = new Image();
 banner.src = './banner.png';
 function displayBanner() {
-    ctx.drawImage(banner, 600, 600, 600, 200);
+    ctx.drawImage(banner, 5, 525, 550, 350);
 }
 
 
@@ -274,12 +278,12 @@ flowersArr.push(flower1Image, flower2Image, flower3Image, flower4Image)
                // console.log('catch');
                 if ( Math.random() <= 0.5 ) {
                    //catchAudio2.pause();
-                    const catchAudio1 = new Audio('catch11.mp3');
+                    const catchAudio1 = new Audio('pickup1.mp3');
                         catchAudio1.play();
                     } 
                     
                     else {
-                        const catchAudio2 = new Audio('catch22.mp3');
+                        const catchAudio2 = new Audio('pickup1.mp3');
                         catchAudio2.play();
                     } 
                     
@@ -332,6 +336,8 @@ class Enemy {
         const distance = Math.sqrt( distX * distX + distY * distY );
         if (distance < this.radius + player.radius) {
             endGame();
+            gameCount++;
+            catchAudio2.play();
         }
 
     }
@@ -340,6 +346,9 @@ class Enemy {
 
  let animationFrameId;
 let enemy1 = new Enemy();
+
+
+
 function displayEnemies() {
     enemy1.update();
     enemy1.draw();
@@ -361,23 +370,28 @@ function endGame(){
 }
 
 
-function stop() {
-    console.log('stop');
-}
 
     function animate(){
         animationFrameId = requestAnimationFrame(animate);
         ctx.clearRect(0, 0, canvas.width, canvas.height);
+        soundtrack.play();
         displayBackground();
         movingCloud1();
         movingCloud2();
         movingCloud3();
         movingCloud4();
+        displayBanner();
         displayEnemies();
         oscarRain();
         player.update();
-        ctx.fillStyle = 'black';
-        ctx.fillText('Oscars:' + score, 20, 780);
+        ctx.font = '45px Courier New';
+        ctx.fillStyle = 'rgb(248, 248, 160)';
+        ctx.fillText('Attempts:'+ gameCount, 144, 690)
+
+
+        ctx.font = '65px Courier New';
+        ctx.fillStyle = 'rgb(248, 248, 160)';
+        ctx.fillText('Flowers:'+ score, 80, 750);
         player.draw();
         frame++;
        
