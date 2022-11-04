@@ -3,6 +3,7 @@
 const canvas = document.querySelector('#canvas');
 const ctx = canvas.getContext('2d');
 const soundtrack = new Audio('./soundtrack.mp3');
+soundtrack.volume = 0.5;
 
 
 
@@ -58,13 +59,13 @@ function displayBanner() {
 
 ///moving clouds  
 const cloud1 = new Image();
-cloud1.src = 'cloud1.png';
+cloud1.src = './cloud1.png';
 const cloud2 = new Image();
-cloud2.src = 'cloud2.png';
+cloud2.src = './cloud2.png';
 const cloud3 = new Image();
-cloud3.src = 'cloud3.png';
+cloud3.src = './cloud3.png';
 const cloud4 = new Image();
-cloud4.src = 'cloud4.png';
+cloud4.src = './cloud4.png';
 
 const cld1 = {
     x1 : 0,
@@ -120,9 +121,9 @@ function movingCloud4() {
 
 ////player
 const beeLeft = new Image();
-beeLeft.src = 'beeSpriteL.png';
+beeLeft.src = './beeSpriteL.png';
 const beeRight = new Image();
-beeRight.src = 'beeSpriteR.png';
+beeRight.src = './beeSpriteR.png';
  class Player {
     constructor() {
         this.x = canvas.width / 2;
@@ -184,13 +185,13 @@ beeRight.src = 'beeSpriteR.png';
  let flowerArr = [];
  const flowersArr = [];
  const flower1Image = new Image();
- flower1Image.src = 'item1.png';
+ flower1Image.src = './item1.png';
  const flower2Image = new Image();
- flower2Image.src = 'item2.png';
+ flower2Image.src = './item2.png';
  const flower3Image = new Image();
- flower3Image.src = 'item3.png';
+ flower3Image.src = './item3.png';
  const flower4Image = new Image();
- flower4Image.src = 'item4.png';
+ flower4Image.src = './item4.png';
 flowersArr.push(flower1Image, flower2Image, flower3Image, flower4Image)
 
 
@@ -247,7 +248,7 @@ flowersArr.push(flower1Image, flower2Image, flower3Image, flower4Image)
             
          } else if (flowerArr[i]) {
             if (flowerArr[i].distance < flowerArr[i].radius + player.radius) {
-                const catchAudio1 = new Audio('pickup1.mp3');
+                const catchAudio1 = new Audio('./pickup1.mp3');
                         catchAudio1.play();
                     score++;
                     timeSeconds += 0.7 ;
@@ -332,7 +333,7 @@ class Rocket {
         this.x = 0 - 200;
         this.y = Math.random() * (canvas.height - 200) + 50;
         this.radius = 25;
-        this.speed = Math.random() * 3 + 2;
+        this.speed = Math.random() * 2.5 + 1.5;
         this.frame = 0;
         this.image = rocketImg;
     }
@@ -349,7 +350,7 @@ class Rocket {
         if ( this.x > canvas.width + 200) {
             this.x = 0 - 200;
             this.y = Math.random() * (canvas.height - 150) + 90;
-            this.speed = Math.random() * 3 + 2;
+            this.speed = Math.random() * 2.5 + 1.5;
         }
         //// collision
         const distX = this.x - player.x;
@@ -457,6 +458,7 @@ let firstTen =true;
         }
     }
  
+    ///document.querySelector("soundtrack").volume = 0.2;
  document.querySelector('#start').addEventListener('click', () => {
     document.querySelector('#start-screen').style.display = 'none'
     document.querySelector('.start-text1').style.display = 'none'
