@@ -384,6 +384,7 @@ function displayEnemies() {
 
 function endGame(endGameMessage){
     cancelAnimationFrame(animationFrameId)
+    soundtrack.pause();
     timeSeconds = 100;
     ctx.font = '200px Comic Sans MS'
     ctx.fillStyle = 'red';
@@ -401,14 +402,17 @@ function endGame(endGameMessage){
     startScreen.style.left = '50%'
     startScreen.style.transform = 'translate(-50%, -50%)'
 }
+let firstTen =true;
 //////////////how to play once and not every second///////ticking clock when timer goes down to 10 seconds//////
     function animate(){
         if(frame % 60 === 0){
             timeSeconds--;
-            // if ( timeSeconds === 10 ){
-            //     const timeOutAudio = new Audio('./timeOut.mp3');
-            //     timeOutAudio.play();
-            // }
+            if ( timeSeconds === 10 && firstTen){  
+                firstTen = false
+                const timeOutAudio = new Audio('./timeOut.mp3');
+                timeOutAudio.play();
+            }
+            
         }
 
         animationFrameId = requestAnimationFrame(animate);
