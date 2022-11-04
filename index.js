@@ -1,4 +1,4 @@
-
+/////////fix timer////TOO FAST/////
 
 const canvas = document.querySelector('#canvas');
 const ctx = canvas.getContext('2d');
@@ -13,7 +13,7 @@ let frame = 0;
 let score = 0;
 let gameCount = 0;
 let record = 0;
-let timeSeconds = 60;
+let timeSeconds = 100;
 
 
 
@@ -125,7 +125,7 @@ const beeRight = new Image();
 beeRight.src = 'beeSpriteR.png';
  class Player {
     constructor() {
-        this.x = canvas.width;
+        this.x = canvas.width / 2;
         this.y = canvas.height / 2;
         this.radius = 55;
         this.angle = 0;
@@ -180,9 +180,9 @@ beeRight.src = 'beeSpriteR.png';
     const player = new Player();
 
     ////////Flowers
-let flowerArr = [];
 
-const flowersArr = []
+ let flowerArr = [];
+ const flowersArr = [];
  const flower1Image = new Image();
  flower1Image.src = 'item1.png';
  const flower2Image = new Image();
@@ -224,7 +224,7 @@ flowersArr.push(flower1Image, flower2Image, flower3Image, flower4Image)
 
 
  function flowerRain() {
-    if (frame % 45 === 0) {
+    if (frame % 60 === 0) {
         const randomFlower = flowersArr[Math.floor(Math.random() * flowersArr.length)]
         flowerArr.push(new Flower(randomFlower));
 
@@ -240,22 +240,27 @@ flowersArr.push(flower1Image, flower2Image, flower3Image, flower4Image)
             if (flowerArr[i].distance < flowerArr[i].radius + player.radius) {
                 const catchAudio1 = new Audio('pickup1.mp3');
                         catchAudio1.play();
-               // console.log('catch');
-//                 if ( Math.random() <= 0.5 ) {
-//                    //catchAudio2.pause();
-//                     const catchAudio1 = new Audio('pickup1.mp3');
-//                         catchAudio1.play();
-//                     } 
-//   ////////fix sounds before project is pushed                  
-//                     else {
-//                         const catchAudio2 = new Audio('pickup1.mp3');
-//                         catchAudio2.play();
-//                     } 
                     score++;
-                    timeSeconds += 0.7;
+                    timeSeconds += 0.7 ;
                     flowerArr[i].scoreAdded = true;
                     flowerArr.splice(i, 1);
                     i--;
+                    if(score === 10) {
+                        const anotherOneAudio1 = new Audio('./anotherOne1.mp3');
+                        anotherOneAudio1.play();
+                    }
+                    if(score === 20) {
+                        const anotherOneAudio2 = new Audio('./anotherOne2.mp3');
+                        anotherOneAudio2.play();
+                    }
+                    if(score === 30) {
+                        const anotherOneAudio3 = new Audio('./anotherOne3.mp3');
+                        anotherOneAudio3.play();
+                    }
+                    if(score === 40) {
+                        const anotherOneAudio4 = new Audio('./anotherOne1.mp3');
+                        anotherOneAudio4.play();
+                    }
                 
              }
          } 
@@ -276,8 +281,8 @@ class Enemy {
     constructor(){
         this.x = canvas.width + 200;
         this.y = Math.random() * (canvas.height - 200) + 50;
-        this.radius = 20;
-        this.speed = Math.random() * 6 + 4;
+        this.radius = 25;
+        this.speed = Math.random() * 3 + 2;
         this.frame = 0;
         this.image = enemyImg;
     }
@@ -287,16 +292,16 @@ class Enemy {
         //ctx.fillRect(this.x, this.y, 120, 30)
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
         ctx.fill();
-       ctx.drawImage(this.image, this.x - 45 , this.y - 116 , 260, 240 );
+       ctx.drawImage(this.image, this.x - 65 , this.y - 183 , 280, 380 );
         ctx.closePath();
     }
     update () {
-        this.x -= this.speed * 1.2;
+        this.x -= this.speed;
         
         if ( this.x < -300) {
             this.x = canvas.width + 200;
             this.y = Math.random() * (canvas.height - 150) + 90;
-            this.speed = Math.random() * 6 + 4;
+            this.speed = Math.random() * 3 + 2;
         }
         ////collision
         const distX = this.x - player.x;
@@ -317,8 +322,8 @@ class Rocket {
     constructor(){
         this.x = 0 - 200;
         this.y = Math.random() * (canvas.height - 200) + 50;
-        this.radius = 20;
-        this.speed = Math.random() * 6 + 4;
+        this.radius = 25;
+        this.speed = Math.random() * 3 + 2;
         this.frame = 0;
         this.image = rocketImg;
     }
@@ -327,15 +332,15 @@ class Rocket {
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
         ctx.fill();
-        ctx.drawImage(this.image, this.x - 240, this.y - 150, 340, 320 );
+        ctx.drawImage(this.image, this.x - 270, this.y - 235, 400, 500 );
         ctx.closePath();
     }
     update () {
-        this.x += this.speed * 1.2;
+        this.x += this.speed;
         if ( this.x > canvas.width + 200) {
             this.x = 0 - 200;
             this.y = Math.random() * (canvas.height - 150) + 90;
-            this.speed = Math.random() * 6 + 4;
+            this.speed = Math.random() * 3 + 2;
         }
         //// collision
         const distX = this.x - player.x;
@@ -370,13 +375,13 @@ function displayEnemies() {
 
 function endGame(endGameMessage){
     cancelAnimationFrame(animationFrameId)
-    timeSeconds = 60;
+    timeSeconds = 100;
     ctx.font = '200px Comic Sans MS'
     ctx.fillStyle = 'red';
     ctx.fillText(endGameMessage, 92, 240);
     ctx.font = '100px Comic Sans MS'
     ctx.fillStyle = 'white';
-    ctx.fillText("Score:" + score, 410, 340);
+    ctx.fillText("Score:" + score, 400, 340);
     score = 0;
     enemy1 = new Enemy();
     rocket1 = new Rocket();
@@ -387,7 +392,7 @@ function endGame(endGameMessage){
     startScreen.style.left = '50%'
     startScreen.style.transform = 'translate(-50%, -50%)'
 }
-
+//////////////how to play once and not every second///////ticking clock when timer goes down to 10 seconds//////
     function animate(){
         if(frame % 60 === 0){
             timeSeconds--;
@@ -399,7 +404,7 @@ function endGame(endGameMessage){
 
         animationFrameId = requestAnimationFrame(animate);
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        //soundtrack.play();
+        soundtrack.play();
         displayBackground();
         movingCloud1();
         movingCloud2();
@@ -407,7 +412,9 @@ function endGame(endGameMessage){
         movingCloud4();
         displayBanner();
         displayEnemies();
+        //discoRain();
         flowerRain();
+       // discoRain();
         player.update();
         ctx.font = '45px Courier New';
         ctx.fillStyle = 'black';
@@ -421,21 +428,20 @@ function endGame(endGameMessage){
         ctx.font = '45px Courier New';
         
         ctx.fillStyle = 'rgb(60, 149, 213)';
-        ctx.fillText('Timer:' + Math.ceil(timeSeconds), 968, 48);
+        ctx.fillText('Timer:' + Math.ceil(timeSeconds), 940, 48);
 
         player.draw();
         frame++;
         if(timeSeconds <= 0) {
             endGame('  You Lost!');
-            const youLostAudio = new Audio('./youLost.wav');
-            youLostAudio.play();
+            const nooAudio = new Audio('./noo.mp3');
+            nooAudio.play();
         }
-        if(score >= 100) {
+        if(score >= 50) {
             endGame('  You Won!');
             const winAudio = new Audio('./winAudio.mp3');
             winAudio.play();
         }
-       
     }
  
  document.querySelector('#start').addEventListener('click', () => {
@@ -448,12 +454,105 @@ function endGame(endGameMessage){
 
  })
 
-     //////background sound
-     ////collission sound
-     /////flower collect sound
-     //////timer move to the top
-     ///change game over text style/ position
-     /////dress up start game button
-     ////put some text on welcome screen
-     ////rotate flowers when falling
-     ////trail effects after player/enemy
+ 
+
+
+     //////disco-balls
+
+
+
+// let discoArr = [];
+
+// const discoballsArr = [];
+//  const discoBall1 = new Image();
+//  discoBall1.src = './discoBall1.png';
+//  const discoBall2 = new Image();
+//  discoBall2.src = './discoBall2.png';
+//  const discoBall3 = new Image();
+//  discoBall3.src = './discoBall3.png';
+//  const discoBall4 = new Image();
+//  discoBall4.src = './discoBall4.png';
+// discoballsArr.push(discoBall1, discoBall2, discoBall3, discoBall4);
+
+
+//  class Disco {
+//   constructor(discoImage) {
+//     this.x = Math.random() * canvas.width;
+//     this.y = -70;
+//     this.speed = Math.random() * 5 + 1;
+//     this.radius = 30;
+//     this.distance = 0;
+//     this.scoreAdded = false;
+//     this.image = discoImage;
+//   }
+//   update() {
+//     this.y += this.speed;
+//     const distX = this.x - player.x;
+//     const distY = this.y - player.y;
+//    this.distance = Math.sqrt( distX * distX + distY * distY );
+//   }
+//   draw() {
+//     ctx.fillStyle = 'yellow';
+//     ctx.beginPath();
+//     ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+//     ctx.fill();
+//     ctx.closePath();
+    
+//    ///ctx.drawImage(this.image, this.x - 40, this.y - 40, 80, 80 );
+
+//   }
+//  }
+
+
+//  function discoRain() {
+//     if (frame % 10 === 0) {
+//         const randomDisco = discoballsArr[Math.floor(Math.random() * discoArr.length)]
+//         discoArr.push(new Disco(randomDisco));
+
+//     }
+//     for (let i = 0; i < discoArr.length; i++ ) {
+//         discoArr[i].update();
+//         discoArr[i].draw(); 
+//         if ( discoArr[i].y > canvas.height + discoArr[i].radius * 2) {
+//             discoArr.splice(i, 1);
+//             i--;
+            
+//          } else if (discoArr[i]) {
+//             if (discoArr[i].distance < discoArr[i].radius + player.radius) {
+//                 const catchAudio1 = new Audio('pickup1.mp3');
+//                         catchAudio1.play();
+//                // console.log('catch');
+// //                 if ( Math.random() <= 0.5 ) {
+// //                    //catchAudio2.pause();
+// //                     const catchAudio1 = new Audio('pickup1.mp3');
+// //                         catchAudio1.play();
+// //                     } 
+// //   ////////fix sounds before project is pushed                  
+// //                     else {
+// //                         const catchAudio2 = new Audio('pickup1.mp3');
+// //                         catchAudio2.play();
+// //                     } 
+                    
+//                     discoArr.splice(i, 1);
+//                     i--;
+                
+//              }
+//          } 
+         
+//          }
+          
+
+    
+// }
+
+               // console.log('catch');
+//                 if ( Math.random() <= 0.5 ) {
+//                    //catchAudio2.pause();
+//                     const catchAudio1 = new Audio('pickup1.mp3');
+//                         catchAudio1.play();
+//                     } 
+//   ////////fix sounds before project is pushed                  
+//                     else {
+//                         const catchAudio2 = new Audio('pickup1.mp3');
+//                         catchAudio2.play();
+//                     } 
