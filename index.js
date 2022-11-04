@@ -292,7 +292,7 @@ class Enemy {
         this.x = canvas.width + 200;
         this.y = Math.random() * (canvas.height - 200) + 50;
         this.radius = 25;
-        this.speed = Math.random() * 3 + 2;
+        this.speed = Math.random() * 2.8 + 1.8;
         this.frame = 0;
         this.image = enemyImg;
     }
@@ -311,7 +311,7 @@ class Enemy {
         if ( this.x < -300) {
             this.x = canvas.width + 200;
             this.y = Math.random() * (canvas.height - 150) + 90;
-            this.speed = Math.random() * 3 + 2;
+            this.speed = Math.random() * 2.8 + 1.8;
         }
         ////collision
         const distX = this.x - player.x;
@@ -333,7 +333,7 @@ class Rocket {
         this.x = 0 - 200;
         this.y = Math.random() * (canvas.height - 200) + 50;
         this.radius = 25;
-        this.speed = Math.random() * 2.5 + 1.5;
+        this.speed = Math.random() * 2.8 + 1.8;
         this.frame = 0;
         this.image = rocketImg;
     }
@@ -350,7 +350,7 @@ class Rocket {
         if ( this.x > canvas.width + 200) {
             this.x = 0 - 200;
             this.y = Math.random() * (canvas.height - 150) + 90;
-            this.speed = Math.random() * 2.5 + 1.5;
+            this.speed = Math.random() * 2.8 + 1.8;
         }
         //// collision
         const distX = this.x - player.x;
