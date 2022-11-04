@@ -215,8 +215,17 @@ flowersArr.push(flower1Image, flower2Image, flower3Image, flower4Image)
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
     ctx.fill();
+    ////
+    ////ctx.rotate(this.radius);
     ctx.closePath();
+    ////
+
+    //Set the origin to the center of the image
+    //ctx.translate(x + width / 2, y + height / 2);
+
+    //Rotate the canvas around the origin
     
+    /////
     ctx.drawImage(this.image, this.x - 40, this.y - 40, 80, 80 );
 
   }
@@ -258,7 +267,7 @@ flowersArr.push(flower1Image, flower2Image, flower3Image, flower4Image)
                         anotherOneAudio3.play();
                     }
                     if(score === 40) {
-                        const anotherOneAudio4 = new Audio('./anotherOne1.mp3');
+                        const anotherOneAudio4 = new Audio('./anotherOne4.mp3');
                         anotherOneAudio4.play();
                     }
                 
